@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hellseher App</title>
+    <!-- Tailwind CSS for styling -->
+    <link rel="stylesheet" href="dist/output.css">
+    <!-- Google Fonts for the special look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Importing 'Anton' for titles and buttons -->
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=IM+Fell+English&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to match the design */
+        body {
+            /* Background is now controlled by theme classes */
+            background-size: cover;
+            background-position: center;
+            font-family: 'IM Fell English', serif;
+            color: #EAE0D5;
+            transition: background-image 0.5s ease-in-out;
+        }
+
+        /* Theme classes for background */
+        .theme-blue {
+            background-image: url('https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/blue_carpet.png');
+        }
+        .theme-wood {
+            background-image: url('https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/dark-old-wooden-table-texture-background-top-view-free-photo.jpg');
+        }
+
+        .font-title {
+            font-family: 'Anton', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            line-height: 1.1;
+        }
+
+        .font-body-text {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .bg-paper-texture {
+            background-image: url('https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/papertexture.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* General Button Style */
+        .btn {
+            border: 3px solid #5A4A3A;
+            color: #991b1b;
+            font-family: 'Anton', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s ease-in-out;
+            border-radius: 0.5rem;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Carousel Styling */
+        .card-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 1rem 40px; 
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .card-container::-webkit-scrollbar { display: none; }
+
+        .psychic-card {
+            flex: 0 0 160px; 
+            height: 240px;
+            background-image: url('https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/papertexture.png');
+            background-size: cover;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            padding: 8px;
+            transition: transform 0.4s ease-in-out;
+            transform: scale(0.85);
+            cursor: pointer;
+        }
+         @media (min-width: 640px) {
+            .psychic-card {
+                flex: 0 0 192px; 
+                height: 288px;
+            }
+        }
+        
+        .psychic-card img, .psychic-card video {
+            width: 100%; height: 100%; object-fit: cover;
+            border: 2px solid #5A4A3A; border-radius: 6px;
+            transition: border-color 0.4s ease-in-out, border-width 0.4s ease-in-out;
+        }
+
+        .psychic-card.is-active { transform: scale(1.0); }
+        .psychic-card.is-active img, .psychic-card.is-active video { 
+            border-color: #991b1b;
+            border-width: 4px;
+        }
+        
+        .carousel-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background-color: rgba(0,0,0,0.4); border-radius: 50%;
+            width: 40px; height: 40px; color: white; display: flex;
+            align-items: center; justify-content: center; cursor: pointer; z-index: 10;
+        }
+        .arrow-left { left: 5px; }
+        .arrow-right { right: 5px; }
+        
+        /* Topic Card Styling */
+        .topic-card {
+            padding: 0.5rem 1rem; border-radius: 12px; border: none;
+            color: #3D2B1F; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: bold; font-size: 1rem; cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 0 0 3px #5A4A3A;
+        }
+         @media (min-width: 640px) {
+            .topic-card {
+                padding: 0.75rem 1.5rem;
+                font-size: 1.125rem;
+            }
+        }
+        .topic-card:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4), inset 0 0 0 3px #5A4A3A;
+        }
+        .topic-card.is-selected {
+            color: #991b1b;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4), inset 0 0 0 4px #991b1b;
+        }
+
+        .screen {
+            width: 100%; min-height: 100vh; display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 1rem; opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .screen.active { display: flex; opacity: 1; }
+        
+        .description { width: 90%; md:w-3/4 lg:w-1/2; max-width: 600px; }
+
+        /* Step 5 Form Styling */
+        .form-card {
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), inset 0 0 0 3px #5A4A3A;
+            width: 90%;
+            max-width: 400px;
+        }
+        .form-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #5A4A3A;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #3D2B1F; /* Dark brown text color */
+            font-weight: bold;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #991b1b; /* Red border on focus */
+        }
+        .form-input::placeholder { color: rgba(61, 43, 31, 0.6); }
+        .checkbox-label {
+            display: flex; align-items: center; cursor: pointer;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #3D2B1F; /* Dark brown text */
+            font-weight: bold;
+        }
+        .custom-checkbox {
+            width: 24px; height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #5A4A3A;
+            border-radius: 4px;
+            margin-right: 0.75rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: border-color 0.2s;
+        }
+        input[type="checkbox"]:checked + .custom-checkbox {
+            border-color: #991b1b;
+        }
+        .custom-checkbox svg { display: none; }
+        input[type="checkbox"]:checked + .custom-checkbox svg { display: block; }
+        input[type="checkbox"] { opacity: 0; width: 0; height: 0; position: absolute; }
+
+
+        @media (max-height: 740px) {
+            .screen h2 { margin-bottom: 1rem; }
+            .screen .description { margin-top: 1rem; height: auto; }
+        }
+        
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+        .theme-switch input {
+            display:none;
+        }
+        .slider {
+            background-color: #5A4A3A;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+        }
+        .slider:before {
+            background-color: #C6AD8F;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 26px;
+        }
+        input:checked + .slider {
+            background-color: #3D2B1F;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .slider.round {
+            border-radius: 34px;
+        }
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+
+    </style>
+</head>
+<body class="theme-blue">
+
+    <div id="theme-switcher" class="fixed top-4 right-4 z-50">
+        <label class="theme-switch">
+            <input type="checkbox" id="theme-toggle">
+            <span class="slider round"></span>
+        </label>
+    </div>
+
+    <div id="app-container" class="relative w-full h-full max-w-screen-xl mx-auto">
+        <div id="step-1-decorations">
+            <img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/key.png" alt="Alter Schlüssel" class="absolute top-8 left-8 w-24 md:w-32 lg:w-48 transform -rotate-12 hidden sm:block">
+            <img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/book.png" alt="Altes Buch" class="absolute bottom-8 left-8 w-64 md:w-80 lg:w-[32rem] transform rotate-6 hidden sm:block">
+            <img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/candlelight.png" alt="Kerzenlicht und Steine" class="absolute top-8 right-8 w-40 md:w-48 lg:w-64 candle-glow hidden sm:block">
+            <img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/invitation.png" alt="Einladung" class="absolute bottom-8 right-8 w-56 md:w-64 lg:w-96 transform -rotate-6 hidden sm:block">
+        </div>
+
+        <div id="step-1" class="screen active pb-32">
+             <h1 class="font-title text-shadow mb-8">
+                <span class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white">Erhalte deine Prophezeiung</span><br>
+                <span class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-yellow-400">von unseren Seherinnen</span>
+            </h1>
+            <div class="mb-8">
+                <div class="psychic-card is-active mx-auto" style="width: 300px; height: 450px; cursor: default;">
+                     <video src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/tuan_vorhersage.mp4" autoplay loop muted playsinline></video>
+                </div>
+            </div>
+        </div>
+
+        <div id="step-2" class="screen pb-32">
+            <h2 class="font-title text-shadow mb-8">
+                <span class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white">WÄHLE DEINE</span><br>
+                <span class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-yellow-400">SEHERIN</span>
+            </h2>
+            <div class="relative w-full max-w-5xl">
+                <div id="step-2-arrow-left" class="carousel-arrow arrow-left"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></div>
+                <div id="step-2-card-container" class="card-container">
+                    <div class="psychic-card" data-index="0"><img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/card_ft_nina.png" alt="Nina"></div>
+                    <div class="psychic-card" data-index="1"><img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/card_ft_tuan.png" alt="Tuan"></div>
+                    <div class="psychic-card" data-index="2"><img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/card_ft_sascha.png" alt="Sascha"></div>
+                    <div class="psychic-card" data-index="3"><img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/card_ft_nina.png" alt="Nina"></div>
+                    <div class="psychic-card" data-index="4"><img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/card_ft_tuan.png" alt="Tuan"></div>
+                    <div class="psychic-card" data-index="5"><img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/card_ft_sascha.png" alt="Sascha"></div>
+                    <div class="psychic-card" data-index="6"><img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/card_ft_nina.png" alt="Nina"></div>
+                    <div class="psychic-card" data-index="7"><img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/card_ft_tuan.png" alt="Tuan"></div>
+                    <div class="psychic-card" data-index="8"><img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/card_ft_sascha.png" alt="Sascha"></div>
+                </div>
+                <div id="step-2-arrow-right" class="carousel-arrow arrow-right"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></div>
+            </div>
+            <div id="step-2-description" class="description h-24 mt-8">
+                <h3 id="step-2-title" class="font-title text-2xl text-white"></h3>
+                <p id="step-2-text" class="text-lg font-body-text"></p>
+            </div>
+        </div>
+        
+        <div id="step-3" class="screen pb-32">
+             <h2 class="font-title text-shadow mb-8">
+                <span class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white">WIEVIEL WAHRHEIT</span><br>
+                <span class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-yellow-400">ERTRÄGST DU?</span>
+            </h2>
+            <div class="relative w-full max-w-5xl">
+                <div id="step-3-arrow-left" class="carousel-arrow arrow-left"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></div>
+                <div id="step-3-card-container" class="card-container">
+                    <div class="psychic-card" data-index="0"><img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/tonalitaet_1.png" alt="Tonalität 1"></div>
+                    <div class="psychic-card" data-index="1"><img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/tonalitaet_2.png" alt="Tonalität 2"></div>
+                    <div class="psychic-card" data-index="2"><img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/tonalitaet_3.png" alt="Tonalität 3"></div>
+                </div>
+                <div id="step-3-arrow-right" class="carousel-arrow arrow-right"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg></div>
+            </div>
+            <div id="step-3-description" class="description h-24 mt-8">
+                <h3 id="step-3-title" class="font-title text-2xl text-white"></h3>
+                <p id="step-3-text" class="text-lg font-body-text"></p>
+            </div>
+        </div>
+
+        <div id="step-4" class="screen pb-32">
+             <h2 class="font-title text-shadow mb-8">
+                <span class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white">WELCHE THEMEN</span><br>
+                <span class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-yellow-400">INTERESSIEREN DICH?</span>
+            </h2>
+            <div id="topic-container" class="flex flex-wrap justify-center gap-3 sm:gap-4 max-w-3xl"></div>
+        </div>
+
+        <div id="step-5" class="screen pb-32">
+            <h2 class="font-title text-shadow mb-8">
+                <span class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white">WOHIN SENDEN WIR</span><br>
+                <span class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-yellow-400">DEINE PROPHEZEIUNG?</span>
+            </h2>
+            <div class="form-card bg-paper-texture">
+                <form id="contact-form" autocomplete="off">
+                    <input type="text" id="vorname" name="vorname" placeholder="Vorname" class="form-input">
+                    <input type="tel" id="handy" name="handy" placeholder="Handy-Nr." class="form-input">
+                    <label class="checkbox-label mt-4">
+                        <input type="checkbox" id="agb" name="agb">
+                        <span class="custom-checkbox">
+                             <svg class="w-4 h-4 text-red-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </span>
+                        Ich akzeptiere die AGBs
+                    </label>
+                </form>
+            </div>
+        </div>
+        
+        <div id="step-6" class="screen">
+             <h2 class="font-title text-shadow mb-8">
+                <span class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white">DEINE</span><br>
+                <span class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white">PROPHEZEIUNG</span><br>
+                <span class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-yellow-400">BEI SONNENUNTERGANG</span>
+            </h2>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div id="nav-container" class="fixed bottom-0 left-0 right-0 p-4 flex justify-center z-20">
+            <button id="start-btn" class="btn bg-paper-texture px-16 py-4 text-2xl sm:text-3xl">Start</button>
+            <div id="step-nav" class="hidden w-full max-w-md flex justify-between gap-4">
+                <button id="back-btn" class="btn bg-paper-texture w-1/2 py-3 text-xl sm:text-2xl">Zurück</button>
+                <button id="next-btn" class="btn bg-paper-texture w-1/2 py-3 text-xl sm:text-2xl" disabled>Weiter</button>
+            </div>
+             <button id="neustart-btn" class="hidden btn bg-paper-texture px-16 py-4 text-2xl sm:text-3xl">Neustart</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const appState = {
+                selections: { 'step-2': null, 'step-3': null, 'step-4': [], },
+                formData: { vorname: '', handy: '', agb: false }
+            };
+            
+            let currentStep = 1;
+            const totalSteps = 6;
+
+            const screens = document.querySelectorAll('.screen');
+            const startBtn = document.getElementById('start-btn');
+            const backBtn = document.getElementById('back-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const stepNav = document.getElementById('step-nav');
+            const step1Decorations = document.getElementById('step-1-decorations');
+            const neustartBtn = document.getElementById('neustart-btn');
+            const themeToggle = document.getElementById('theme-toggle');
+
+            const stepData = {
+                'step-2': {
+                     descriptions: [
+                        { title: "Nina, die Spiegel-Seele", text: "Sie zeigt dir nicht, was du sehen willst, sondern was du sehen musst. Ihr Spiegel ist gnadenlos ehrlich und enthüllt die tiefsten Wahrheiten." },
+                        { title: "Tuan – Der „FAST-KLARE“ Seher", text: "Er ist der Meister der Täuschung und kennt alle kleinen Tricks." },
+                        { title: "Sascha, die Schicksalsweberin", text: "Ihre Finger tanzen auf den Fäden des Schicksals. Sie sieht die Muster, die dein Leben formen, und kann dir zeigen, wo die Reise hingeht." },
+                        { title: "Nina, die Spiegel-Seele", text: "Sie zeigt dir nicht, was du sehen willst, sondern was du sehen musst. Ihr Spiegel ist gnadenlos ehrlich und enthüllt die tiefsten Wahrheiten." },
+                        { title: "Tuan – Der „FAST-KLARE“ Seher", text: "Er ist der Meister der Täuschung und kennt alle kleinen Tricks." },
+                        { title: "Sascha, die Schicksalsweberin", text: "Ihre Finger tanzen auf den Fäden des Schicksals. Sie sieht die Muster, die dein Leben formen, und kann dir zeigen, wo die Reise hingeht." },
+                         { title: "Nina, die Spiegel-Seele", text: "Sie zeigt dir nicht, was du sehen willst, sondern was du sehen musst. Ihr Spiegel ist gnadenlos ehrlich und enthüllt die tiefsten Wahrheiten." },
+                        { title: "Tuan – Der „FAST-KLARE“ Seher", text: "Er ist der Meister der Täuschung und kennt alle kleinen Tricks." },
+                        { title: "Sascha, die Schicksalsweberin", text: "Ihre Finger tanzen auf den Fäden des Schicksals. Sie sieht die Muster, die dein Leben formen, und kann dir zeigen, wo die Reise hingeht." }
+                    ],
+                    titleElement: document.getElementById('step-2-title'),
+                    textElement: document.getElementById('step-2-text')
+                },
+                'step-3': {
+                    descriptions: [
+                        { title: "Mimose", text: "Schon ein Hauch Kritik bringt mich ins Schwitzen. Mein innerer Monolog? „Warum sind alle so gemein?!“" },
+                        { title: "Spiegelkrieger", text: "Ich stelle mich der Wahrheit… so halb. Ich weiß, was ich ändern müsste – aber hey, Self-Awareness ist doch auch schon ein Skill, oder?" },
+                        { title: "Wahrheitspumpe", text: "Gib mir die ungeschönte Wahrheit, ungefiltert und gnadenlos. Ich wachse an jedem Schlag ins Ego. Mehr davon!" }
+                    ],
+                    titleElement: document.getElementById('step-3-title'),
+                    textElement: document.getElementById('step-3-text')
+                }
+            };
+
+            const setupCarousel = (carouselId) => {
+                const container = document.getElementById(`${carouselId}-card-container`);
+                if (!container) return;
+                const cards = Array.from(container.querySelectorAll('.psychic-card'));
+                const arrowLeft = document.getElementById(`${carouselId}-arrow-left`);
+                const arrowRight = document.getElementById(`${carouselId}-arrow-right`);
+                const carouselData = stepData[carouselId];
+
+                let activeCardIndex = -1;
+                let isAnimating = false;
+
+                const updateCarouselPadding = () => {
+                    if (!cards.length) return;
+                    const containerWidth = container.offsetWidth;
+                    const cardWidth = cards[0].offsetWidth;
+                    const sidePadding = (containerWidth / 2) - (cardWidth / 2);
+                    const finalPadding = Math.max(20, sidePadding);
+                    container.style.paddingLeft = `${finalPadding}px`;
+                    container.style.paddingRight = `${finalPadding}px`;
+                };
+
+                const setActiveCard = (index, behavior = 'smooth') => {
+                    if (isAnimating && behavior === 'smooth') return;
+                    if (index < 0 || index >= cards.length) return;
+                    
+                    if (behavior === 'smooth') isAnimating = true;
+
+                    if (activeCardIndex > -1 && cards[activeCardIndex]) {
+                        cards[activeCardIndex].classList.remove('is-active');
+                    }
+                    
+                    activeCardIndex = index;
+                    appState.selections[carouselId] = index;
+
+                    const newActiveCard = cards[activeCardIndex];
+                    if (newActiveCard) newActiveCard.classList.add('is-active');
+                    
+                    if (carouselData?.descriptions?.[index]) {
+                        carouselData.titleElement.textContent = carouselData.descriptions[index].title;
+                        carouselData.textElement.textContent = carouselData.descriptions[index].text;
+                    }
+
+                    if (newActiveCard) {
+                        const containerWidth = container.offsetWidth;
+                        const cardWidth = newActiveCard.offsetWidth;
+                        const cardLeft = newActiveCard.offsetLeft;
+                        const scrollPosition = cardLeft - (containerWidth / 2) + (cardWidth / 2);
+                        container.scrollTo({ left: scrollPosition, behavior: behavior });
+                    }
+                    
+                    if (behavior === 'smooth') {
+                        setTimeout(() => { isAnimating = false; }, 400);
+                    }
+                };
+                
+                cards.forEach((card, index) => {
+                    card.addEventListener('click', () => {
+                         if (index === activeCardIndex) return;
+                         if (index > activeCardIndex) {
+                             setActiveCard(activeCardIndex + 1);
+                         } else {
+                             setActiveCard(activeCardIndex - 1);
+                         }
+                    });
+                });
+
+                arrowLeft.addEventListener('click', () => setActiveCard((activeCardIndex - 1 + cards.length) % cards.length));
+                arrowRight.addEventListener('click', () => setActiveCard((activeCardIndex + 1) % cards.length));
+
+                window.addEventListener('resize', () => {
+                    const parentScreen = container.closest('.screen');
+                    if (parentScreen?.classList.contains('active')) {
+                         updateCarouselPadding();
+                         setActiveCard(activeCardIndex, 'auto');
+                    }
+                });
+                
+                updateCarouselPadding();
+                const initialIndex = appState.selections[carouselId] !== null ? appState.selections[carouselId] : Math.floor(cards.length / 2);
+                setActiveCard(initialIndex, 'auto');
+            };
+
+            const setupTopicSelector = () => {
+                const topics = ["Familienspannung", "Karrierezweifel", "Beziehungschaos", "Kindheitsthema", "Erschöpfung", "Näheproblem", "Familienmuster", "Geldsorgen", "Vertrauensfrage", "On-Off-Dynamik", "Familienalltag", "Liebesblockade", "Jobunsicherheit", "Intimitätsfrage", "Kontaktabbruch"];
+                const container = document.getElementById('topic-container');
+                container.innerHTML = ''; 
+
+                topics.forEach(topic => {
+                    const card = document.createElement('button');
+                    card.className = 'topic-card bg-paper-texture';
+                    card.textContent = topic;
+
+                    if (appState.selections['step-4'].includes(topic)) {
+                        card.classList.add('is-selected');
+                    }
+
+                    card.addEventListener('click', () => {
+                        const selectedTopics = appState.selections['step-4'];
+                        if (card.classList.contains('is-selected')) {
+                            card.classList.remove('is-selected');
+                            appState.selections['step-4'] = selectedTopics.filter(t => t !== topic);
+                        } else {
+                            if (selectedTopics.length < 3) {
+                                card.classList.add('is-selected');
+                                selectedTopics.push(topic);
+                            }
+                        }
+                        checkNextButtonStatus();
+                    });
+                    container.appendChild(card);
+                });
+            };
+            
+            const setupForm = () => {
+                const form = document.getElementById('contact-form');
+                const vornameInput = document.getElementById('vorname');
+                const handyInput = document.getElementById('handy');
+                const agbInput = document.getElementById('agb');
+
+                vornameInput.value = appState.formData.vorname;
+                handyInput.value = appState.formData.handy;
+                agbInput.checked = appState.formData.agb;
+
+                const validateForm = () => {
+                    appState.formData.vorname = vornameInput.value.trim();
+                    appState.formData.handy = handyInput.value.trim();
+                    appState.formData.agb = agbInput.checked;
+                    checkNextButtonStatus();
+                };
+
+                form.addEventListener('input', validateForm);
+            };
+
+            const checkNextButtonStatus = () => {
+                let enabled = false;
+                if (currentStep === 2 || currentStep === 3) {
+                    enabled = true;
+                } else if (currentStep === 4) {
+                    enabled = appState.selections['step-4'].length === 3;
+                } else if (currentStep === 5) {
+                    const { vorname, handy, agb } = appState.formData;
+                    enabled = vorname !== '' && handy !== '' && agb;
+                }
+                nextBtn.disabled = !enabled;
+            };
+
+            const showStep = (stepNumber) => {
+                currentStep = stepNumber;
+                screens.forEach(s => s.classList.remove('active'));
+                const activeScreen = document.getElementById(`step-${stepNumber}`);
+                if (activeScreen) activeScreen.classList.add('active');
+
+                step1Decorations.style.display = (stepNumber === 1) ? 'block' : 'none';
+                startBtn.style.display = (stepNumber === 1) ? 'block' : 'none';
+                stepNav.style.display = (stepNumber > 1 && stepNumber < 6) ? 'flex' : 'none';
+                neustartBtn.style.display = (stepNumber === 6) ? 'block' : 'none';
+
+                nextBtn.textContent = (stepNumber === 5) ? 'Absenden' : 'Weiter';
+                
+                checkNextButtonStatus();
+
+                if (stepNumber === 2) setTimeout(() => setupCarousel('step-2'), 50);
+                if (stepNumber === 3) setTimeout(() => setupCarousel('step-3'), 50);
+                if (stepNumber === 4) setupTopicSelector();
+                if (stepNumber === 5) setupForm();
+            };
+            
+            const resetApp = () => {
+                 appState.selections = { 'step-2': null, 'step-3': null, 'step-4': [] };
+                 appState.formData = { vorname: '', handy: '', agb: false };
+                 document.getElementById('contact-form').reset();
+                 showStep(1);
+            };
+
+            // Theme switcher logic
+            themeToggle.addEventListener('change', () => {
+                 const isWood = themeToggle.checked;
+                 document.body.classList.toggle('theme-wood', isWood);
+                 document.body.classList.toggle('theme-blue', !isWood);
+            });
+
+            startBtn.addEventListener('click', () => showStep(2));
+            nextBtn.addEventListener('click', () => { if (currentStep < totalSteps) showStep(currentStep + 1); });
+            backBtn.addEventListener('click', () => { if (currentStep > 1) showStep(currentStep - 1); });
+            neustartBtn.addEventListener('click', resetApp);
+            
+            showStep(1);
+        });
+    </script>
+
+</body>
+</html>

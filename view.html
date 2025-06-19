@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deine Prophezeiung</title>
+    <!-- Tailwind CSS for styling -->
+    <link rel="stylesheet" href="dist/output.css">
+    <!-- Google Fonts for the special look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Importing 'Anton' for titles and buttons -->
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=IM+Fell+English&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to match the design */
+        body {
+            background-image: url('https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/blue_carpet.png');
+            background-size: cover;
+            background-position: center;
+            font-family: 'IM Fell English', serif;
+            color: #EAE0D5;
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 15;
+            pointer-events: none;
+        }
+        
+        #app-container {
+             position: relative;
+             z-index: 10;
+        }
+
+        .font-title {
+            font-family: 'Anton', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            line-height: 1.1;
+        }
+
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .bg-paper-texture {
+            background-image: url('https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/papertexture.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* General Button Style */
+        .btn {
+            border: 3px solid #5A4A3A;
+            color: #991b1b;
+            font-family: 'Anton', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s ease-in-out;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-card {
+            position: relative;
+            width: 80vw;
+            max-width: 320px;
+            aspect-ratio: 2 / 3;
+            background-image: url('https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/papertexture.png');
+            background-size: cover;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            padding: 8px;
+        }
+        @media (min-width: 640px) {
+            .video-card {
+                 max-width: 400px;
+            }
+        }
+        
+        .video-card video {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: calc(100% - 16px);
+            height: calc(100% - 16px);
+            object-fit: cover;
+            border: 4px solid #991b1b; 
+            border-radius: 6px;
+        }
+
+    </style>
+</head>
+<body class="theme-blue">
+    <canvas id="particle-canvas"></canvas>
+
+    <div id="app-container" class="relative w-full h-full max-w-screen-xl mx-auto flex flex-col items-center justify-center min-h-screen text-center p-4">
+        <div id="step-1-decorations" class="hidden sm:block">
+            <img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/key.png" alt="Alter Schlüssel" class="absolute top-8 left-8 w-24 md:w-32 lg:w-48 transform -rotate-12">
+            <img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/book.png" alt="Altes Buch" class="absolute bottom-24 left-4 w-52 md:w-64 lg:w-[25rem] transform rotate-6">
+            <img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/candlelight.png" alt="Kerzenlicht und Steine" class="absolute top-8 right-8 w-40 md:w-48 lg:w-64 candle-glow">
+            <img src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/invitation.png" alt="Einladung" class="absolute bottom-24 right-4 w-56 md:w-64 lg:w-96 transform -rotate-6">
+        </div>
+
+        <h1 id="prediction-title" class="font-title text-shadow mb-4 sm:mb-8">
+            <span class="text-3xl sm:text-4xl md:text-6xl text-white">Deine Prophezeiung</span><br>
+            <span class="text-2xl sm:text-3xl md:text-5xl text-yellow-400">von einer unserer Seherinnen</span>
+        </h1>
+
+        <div class="video-card mb-4 sm:mb-8">
+             <video id="prediction-video" src="https://mcjnlbckxiitlhvcvbiz.supabase.co/storage/v1/object/public/vibeimages/tuan_vorhersage.mp4" autoplay loop muted playsinline controls></video>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+             <button id="share-btn" class="btn bg-paper-texture px-10 sm:px-12 py-3 sm:py-4 text-xl sm:text-2xl">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                 <span>Teilen</span>
+            </button>
+            <a href="./index.html" class="btn bg-paper-texture px-10 sm:px-12 py-3 sm:py-4 text-xl sm:text-2xl">Neue Prophezeiung</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const setupParticleEffect = () => {
+                const canvas = document.getElementById('particle-canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                let particlesArray = [];
+
+                class Particle {
+                    constructor() {
+                        this.x = Math.random() * canvas.width;
+                        this.y = Math.random() * canvas.height;
+                        this.size = Math.random() * 2 + 1;
+                        this.speedX = Math.random() * 0.2 - 0.1; // Slower speed
+                        this.speedY = Math.random() * 0.2 - 0.1; // Slower speed
+                        this.opacity = Math.random() * 0.3 + 0.1; // More transparent
+                    }
+                    update() {
+                        this.x += this.speedX;
+                        this.y += this.speedY;
+                        if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                        if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+                    }
+                    draw() {
+                        ctx.fillStyle = `rgba(234, 224, 213, ${this.opacity})`;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+
+                const initParticles = () => {
+                    particlesArray = [];
+                    const numberOfParticles = (canvas.width * canvas.height) / 9000;
+                    for (let i = 0; i < numberOfParticles; i++) {
+                        particlesArray.push(new Particle());
+                    }
+                };
+
+                const animateParticles = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    for (let i = 0; i < particlesArray.length; i++) {
+                        particlesArray[i].update();
+                        particlesArray[i].draw();
+                    }
+                    requestAnimationFrame(animateParticles);
+                };
+                
+                initParticles();
+                animateParticles();
+
+                window.addEventListener('resize', () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    initParticles();
+                });
+            };
+
+            // Parse URL parameters and update content
+            const urlParams = new URLSearchParams(window.location.search);
+            const userName = urlParams.get('name') || 'Deine';
+            const psychicName = urlParams.get('psychic') || 'einer unserer Seherinnen';
+            const videoUrl = urlParams.get('videoUrl');
+
+            const titleElement = document.getElementById('prediction-title');
+            const videoElement = document.getElementById('prediction-video');
+
+            titleElement.innerHTML = `
+                <span class="text-3xl sm:text-4xl md:text-6xl text-white">${userName}'s Prophezeiung</span><br>
+                <span class="text-2xl sm:text-3xl md:text-5xl text-yellow-400">von ${psychicName}</span>
+            `;
+            
+            if (videoUrl) {
+                videoElement.src = videoUrl;
+            }
+
+            // Share button logic
+            const shareBtn = document.getElementById('share-btn');
+            const shareBtnText = shareBtn.querySelector('span');
+            shareBtn.addEventListener('click', () => {
+                const urlToCopy = window.location.href;
+                
+                const tempInput = document.createElement('textarea');
+                tempInput.value = urlToCopy;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+
+                const originalText = shareBtnText.textContent;
+                shareBtnText.textContent = 'Link kopiert!';
+                setTimeout(() => {
+                    shareBtnText.textContent = originalText;
+                }, 2000);
+            });
+
+            setupParticleEffect();
+        });
+    </script>
+
+</body>
+</html>
