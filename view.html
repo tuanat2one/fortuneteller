@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deine Prophezeiung</title>
+    <!-- URL-Parameter Überprüfung - wird sofort ausgeführt -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Überprüfe ob pid Parameter existiert (Wert ist egal)
+            if (!urlParams.has('pid')) {
+                // Weiterleitung zur index.html
+                window.location.href = './index.html';
+                return; // Verhindere weitere Ausführung
+            }
+        })();
+    </script>
     <!-- Tailwind CSS for styling -->
     <link rel="stylesheet" href="dist/output.css">
     <!-- Google Fonts for the special look -->
