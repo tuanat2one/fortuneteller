@@ -435,75 +435,75 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+
             const setupParticleEffect = () => {
-                const canvas = document.getElementById('particle-canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                let particlesArray = [];
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            let particlesArray = [];
 
-                class Particle {
-                    constructor() {
-                        this.x = Math.random() * canvas.width;
-                        this.y = Math.random() * canvas.height;
-                        this.size = Math.random() * 2 + 1;
-                        this.speedX = Math.random() * 0.2 - 0.1; // Slower speed
-                        this.speedY = Math.random() * 0.2 - 0.1; // Slower speed
-                        this.opacity = Math.random() * 0.3 + 0.1; // More transparent
-                    }
-                    update() {
-                        this.x += this.speedX;
-                        this.y += this.speedY;
-                        if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
-                        if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
-                    }
-                    draw() {
-                        ctx.fillStyle = `rgba(234, 224, 213, ${this.opacity})`;
-                        ctx.beginPath();
-                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                }
+            class Particle {
+            constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = Math.random() * 0.2 - 0.1;
+            this.speedY = Math.random() * 0.2 - 0.1;
+            this.opacity = Math.random() * 0.3 + 0.1;
+        }
+            update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+            if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+        }
+            draw() {
+            ctx.fillStyle = `rgba(234, 224, 213, ${this.opacity})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        }
 
-                const initParticles = () => {
-                    particlesArray = [];
-                    const numberOfParticles = (canvas.width * canvas.height) / 9000;
-                    for (let i = 0; i < numberOfParticles; i++) {
-                        particlesArray.push(new Particle());
-                    }
-                };
+            const initParticles = () => {
+            particlesArray = [];
+            const numberOfParticles = (canvas.width * canvas.height) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+            particlesArray.push(new Particle());
+        }
+        };
 
-                const animateParticles = () => {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    for (let i = 0; i < particlesArray.length; i++) {
-                        particlesArray[i].update();
-                        particlesArray[i].draw();
-                    }
-                    requestAnimationFrame(animateParticles);
-                };
-                
-                initParticles();
-                animateParticles();
+            const animateParticles = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+            particlesArray[i].draw();
+        }
+            requestAnimationFrame(animateParticles);
+        };
 
-                window.addEventListener('resize', () => {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                    initParticles();
-                });
-            };
+            initParticles();
+            animateParticles();
+
+            window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+        };
 
             const appState = {
-                selections: {
-                    'step-2': { index: null, wahrsagerId: null },
-                    'step-3': { index: null, level: null },
-                    'step-4': [],
-                },
-                formData: { vorname: '', handy: '', agb: false }
-            };
-            
+            selections: {
+            'step-2': { index: null, wahrsagerId: null },
+            'step-3': { index: null, level: null },
+            'step-4': [],
+        },
+            formData: { vorname: '', handy: '', agb: false }
+        };
+
             let currentStep = 1;
             const totalSteps = 6;
             const screens = document.querySelectorAll('.screen');
@@ -517,15 +517,15 @@
 
             const stepData = {
                 'step-2': {
-                     descriptions: [
+                    descriptions: [
                         { title: "🌀 Nina – die Karten-Karriereberaterin", text: "Lächelt dir die Zukunft schön – Spezialgebiete: toxische Ex-Gespenster & Power-Outfits im Horoskop." },
-                        { title: "🔮 Tuan – der „Fast-klare“ Seher", text: "Kennt alle kleinen Tricks, aber verliert sich gern in kosmischen Nebensätzen." },
+                        { title: "🔮 Tuan – der Fast-klare Seher", text: "Kennt alle kleinen Tricks, aber verliert sich gern in kosmischen Nebensätzen." },
                         { title: "✨ Sascha – die Zukunftsflüsterin", text: "Einfühlsam, präzise, manchmal brutal ehrlich. Liest nicht nur Karten, sondern auch dich." },
                         { title: "🌀 Nina – die Karten-Karriereberaterin", text: "Lächelt dir die Zukunft schön – Spezialgebiete: toxische Ex-Gespenster & Power-Outfits im Horoskop." },
-                        { title: "🔮 Tuan – der „Fast-klare“ Seher", text: "Kennt alle kleinen Tricks, aber verliert sich gern in kosmischen Nebensätzen." },
+                        { title: "🔮 Tuan – der Fast-klare Seher", text: "Kennt alle kleinen Tricks, aber verliert sich gern in kosmischen Nebensätzen." },
                         { title: "✨ Sascha – die Zukunftsflüsterin", text: "Einfühlsam, präzise, manchmal brutal ehrlich. Liest nicht nur Karten, sondern auch dich." },
                         { title: "🌀 Nina – die Karten-Karriereberaterin", text: "Lächelt dir die Zukunft schön – Spezialgebiete: toxische Ex-Gespenster & Power-Outfits im Horoskop." },
-                        { title: "🔮 Tuan – der „Fast-klare“ Seher", text: "Kennt alle kleinen Tricks, aber verliert sich gern in kosmischen Nebensätzen." },
+                        { title: "🔮 Tuan – der Fast-klare Seher", text: "Kennt alle kleinen Tricks, aber verliert sich gern in kosmischen Nebensätzen." },
                         { title: "✨ Sascha – die Zukunftsflüsterin", text: "Einfühlsam, präzise, manchmal brutal ehrlich. Liest nicht nur Karten, sondern auch dich." }
                     ],
                     titleElement: document.getElementById('step-2-title'),
@@ -533,218 +533,316 @@
                 },
                 'step-3': {
                     descriptions: [
-                        { title: "🧻 „Bitte nur mit Watte bewerfen.“", text: "Du willst die Wahrheit? Okay. Aber in Zeitlupe. Und bitte weich verpackt." },
+                        { title: "🧻 Bitte nur mit Watte bewerfen.", text: "Du willst die Wahrheit? Okay. Aber in Zeitlupe. Und bitte weich verpackt." },
                         { title: "🪞 Meister:in Spiegelhart", text: "Ich zeig dir, was du nicht sehen willst – aber mit Stil. Eher Spiegel als Schaufel." },
                         { title: "🔨 Orakel der Schmerzen", text: "Wahrheit? Ich knall sie dir ins Gesicht. Ohne Filter. Ohne Mitleid. Viel Spaß." }
                     ],
                     titleElement: document.getElementById('step-3-title'),
                     textElement: document.getElementById('step-3-text')
                 }
+
             };
 
             const setupCarousel = (carouselId) => {
-                const container = document.getElementById(`${carouselId}-card-container`);
-                if (!container) return;
-                const cards = Array.from(container.querySelectorAll('.psychic-card'));
-                const arrowLeft = document.getElementById(`${carouselId}-arrow-left`);
-                const arrowRight = document.getElementById(`${carouselId}-arrow-right`);
-                const carouselData = stepData[carouselId];
+            const container = document.getElementById(`${carouselId}-card-container`);
+            if (!container) return;
+            const cards = Array.from(container.querySelectorAll('.psychic-card'));
+            const arrowLeft = document.getElementById(`${carouselId}-arrow-left`);
+            const arrowRight = document.getElementById(`${carouselId}-arrow-right`);
+            const carouselData = stepData[carouselId];
 
-                let activeCardIndex = -1;
-                let isAnimating = false;
+            let activeCardIndex = -1;
+            let isAnimating = false;
 
-                const updateCarouselPadding = () => {
-                    if (!cards.length) return;
-                    const containerWidth = container.offsetWidth;
-                    const cardWidth = cards[0].offsetWidth;
-                    const sidePadding = (containerWidth / 2) - (cardWidth / 2);
-                    const finalPadding = Math.max(20, sidePadding);
-                    container.style.paddingLeft = `${finalPadding}px`;
-                    container.style.paddingRight = `${finalPadding}px`;
-                };
+            const updateCarouselPadding = () => {
+            if (!cards.length) return;
+            const containerWidth = container.offsetWidth;
+            const cardWidth = cards[0].offsetWidth;
+            const sidePadding = (containerWidth / 2) - (cardWidth / 2);
+            const finalPadding = Math.max(20, sidePadding);
+            container.style.paddingLeft = `${finalPadding}px`;
+            container.style.paddingRight = `${finalPadding}px`;
+        };
 
-                const setActiveCard = (index, behavior = 'smooth') => {
-                    if (isAnimating && behavior === 'smooth') return;
-                    if (index < 0 || index >= cards.length) return;
-                    
-                    if (behavior === 'smooth') isAnimating = true;
+            const setActiveCard = (index, behavior = 'smooth') => {
+            if (isAnimating && behavior === 'smooth') return;
+            if (index < 0 || index >= cards.length) return;
 
-                    if (activeCardIndex > -1 && cards[activeCardIndex]) {
-                        cards[activeCardIndex].classList.remove('is-active');
-                    }
-                    
-                    activeCardIndex = index;
-                    appState.selections[carouselId] = index;
+            if (behavior === 'smooth') isAnimating = true;
 
-                    const newActiveCard = cards[activeCardIndex];
-                    if (newActiveCard) newActiveCard.classList.add('is-active');
-                    
-                    if (carouselData?.descriptions?.[index % carouselData.descriptions.length]) {
-                        carouselData.titleElement.textContent = carouselData.descriptions[index % carouselData.descriptions.length].title;
-                        carouselData.textElement.textContent = carouselData.descriptions[index % carouselData.descriptions.length].text;
-                    }
+            if (activeCardIndex > -1 && cards[activeCardIndex]) {
+            cards[activeCardIndex].classList.remove('is-active');
+        }
 
-                    if (newActiveCard) {
-                        const containerWidth = container.offsetWidth;
-                        const cardWidth = newActiveCard.offsetWidth;
-                        const cardLeft = newActiveCard.offsetLeft;
-                        const scrollPosition = cardLeft - (containerWidth / 2) + (cardWidth / 2);
-                        container.scrollTo({ left: scrollPosition, behavior: behavior });
-                    }
-                    
-                    if (behavior === 'smooth') {
-                        setTimeout(() => { isAnimating = false; }, 400);
-                    }
-                };
-                
-                cards.forEach((card, index) => {
-                    card.addEventListener('click', () => {
-                         if (index === activeCardIndex) return;
-                         if (index > activeCardIndex) {
-                             setActiveCard(activeCardIndex + 1);
-                         } else {
-                             setActiveCard(activeCardIndex - 1);
-                         }
-                    });
-                });
+            activeCardIndex = index;
 
-                arrowLeft.addEventListener('click', () => setActiveCard((activeCardIndex - 1 + cards.length) % cards.length));
-                arrowRight.addEventListener('click', () => setActiveCard((activeCardIndex + 1) % cards.length));
+            // HIER IST DIE WICHTIGE ÄNDERUNG: Data-Attribute lesen und in appState speichern
+            const activeCard = cards[activeCardIndex];
+            if (carouselId === 'step-2') {
+            appState.selections['step-2'] = {
+            index: index,
+            wahrsagerId: activeCard.getAttribute('data-wahrsager-id')
+        };
+        } else if (carouselId === 'step-3') {
+            appState.selections['step-3'] = {
+            index: index,
+            level: activeCard.getAttribute('data-level')
+        };
+        }
 
-                window.addEventListener('resize', () => {
-                    const parentScreen = container.closest('.screen');
-                    if (parentScreen?.classList.contains('active')) {
-                         updateCarouselPadding();
-                         setActiveCard(activeCardIndex, 'auto');
-                    }
-                });
-                
-                updateCarouselPadding();
-                const initialIndex = appState.selections[carouselId] !== null ? appState.selections[carouselId] : Math.floor(cards.length / 2);
-                setActiveCard(initialIndex, 'auto');
-            };
-            
+            if (activeCard) activeCard.classList.add('is-active');
+
+            if (carouselData?.descriptions?.[index % carouselData.descriptions.length]) {
+            carouselData.titleElement.textContent = carouselData.descriptions[index % carouselData.descriptions.length].title;
+            carouselData.textElement.textContent = carouselData.descriptions[index % carouselData.descriptions.length].text;
+        }
+
+            if (activeCard) {
+            const containerWidth = container.offsetWidth;
+            const cardWidth = activeCard.offsetWidth;
+            const cardLeft = activeCard.offsetLeft;
+            const scrollPosition = cardLeft - (containerWidth / 2) + (cardWidth / 2);
+            container.scrollTo({ left: scrollPosition, behavior: behavior });
+        }
+
+            if (behavior === 'smooth') {
+            setTimeout(() => { isAnimating = false; }, 400);
+        }
+
+            checkNextButtonStatus();
+        };
+
+            cards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+            if (index === activeCardIndex) return;
+            if (index > activeCardIndex) {
+            setActiveCard(activeCardIndex + 1);
+        } else {
+            setActiveCard(activeCardIndex - 1);
+        }
+        });
+        });
+
+            arrowLeft.addEventListener('click', () => setActiveCard((activeCardIndex - 1 + cards.length) % cards.length));
+            arrowRight.addEventListener('click', () => setActiveCard((activeCardIndex + 1) % cards.length));
+
+            window.addEventListener('resize', () => {
+            const parentScreen = container.closest('.screen');
+            if (parentScreen?.classList.contains('active')) {
+            updateCarouselPadding();
+            setActiveCard(activeCardIndex, 'auto');
+        }
+        });
+
+            updateCarouselPadding();
+            const initialIndex = appState.selections[carouselId]?.index !== null ? appState.selections[carouselId].index : Math.floor(cards.length / 2);
+            setActiveCard(initialIndex, 'auto');
+        };
+
             const setupTopicSelector = () => {
-                const topics = ["Neuanfang", "Lieblingsmoment", "Gute Gespräche", "Kleine Überraschung", "Neue Energie", "Frischer Wind", "Herzenssache", "Glücksgriff", "Wohlfühlzeit", "Spontane Idee", "Kleine Veränderung", "Plan B", "Mehr Mut", "Gute Laune", "Etwas Neues wagen"];
-                const container = document.getElementById('topic-container');
-                container.innerHTML = ''; 
+            const topics = ["Neuanfang", "Lieblingsmoment", "Gute Gespräche", "Kleine Überraschung", "Neue Energie", "Frischer Wind", "Herzenssache", "Glücksgriff", "Wohlfühlzeit", "Spontane Idee", "Kleine Veränderung", "Plan B", "Mehr Mut", "Gute Laune", "Etwas Neues wagen"];
+            const container = document.getElementById('topic-container');
+            container.innerHTML = '';
 
-                topics.forEach(topic => {
-                    const card = document.createElement('button');
-                    card.className = 'topic-card bg-paper-texture';
-                    card.textContent = topic;
+            topics.forEach(topic => {
+            const card = document.createElement('button');
+            card.className = 'topic-card bg-paper-texture';
+            card.textContent = topic;
 
-                    if (appState.selections['step-4'].includes(topic)) {
-                        card.classList.add('is-selected');
-                    }
+            if (appState.selections['step-4'].includes(topic)) {
+            card.classList.add('is-selected');
+        }
 
-                    card.addEventListener('click', () => {
-                        const selectedTopics = appState.selections['step-4'];
-                        if (card.classList.contains('is-selected')) {
-                            card.classList.remove('is-selected');
-                            appState.selections['step-4'] = selectedTopics.filter(t => t !== topic);
-                        } else {
-                            if (selectedTopics.length < 3) {
-                                card.classList.add('is-selected');
-                                selectedTopics.push(topic);
-                            }
-                        }
-                        checkNextButtonStatus();
-                    });
-                    container.appendChild(card);
-                });
-            };
-            
+            card.addEventListener('click', () => {
+            const selectedTopics = appState.selections['step-4'];
+            if (card.classList.contains('is-selected')) {
+            card.classList.remove('is-selected');
+            appState.selections['step-4'] = selectedTopics.filter(t => t !== topic);
+        } else {
+            if (selectedTopics.length < 3) {
+            card.classList.add('is-selected');
+            selectedTopics.push(topic);
+        }
+        }
+            checkNextButtonStatus();
+        });
+            container.appendChild(card);
+        });
+        };
+
             const setupForm = () => {
-                const form = document.getElementById('contact-form');
-                const vornameInput = document.getElementById('vorname');
-                const handyInput = document.getElementById('handy');
-                const agbInput = document.getElementById('agb');
+            const form = document.getElementById('contact-form');
+            const vornameInput = document.getElementById('vorname');
+            const handyInput = document.getElementById('handy');
+            const agbInput = document.getElementById('agb');
 
-                vornameInput.value = appState.formData.vorname;
-                handyInput.value = appState.formData.handy;
-                agbInput.checked = appState.formData.agb;
+            vornameInput.value = appState.formData.vorname;
+            handyInput.value = appState.formData.handy;
+            agbInput.checked = appState.formData.agb;
 
-                const validateForm = () => {
-                    appState.formData.vorname = vornameInput.value.trim();
-                    appState.formData.handy = handyInput.value.trim();
-                    appState.formData.agb = agbInput.checked;
-                    checkNextButtonStatus();
-                };
+            const validateForm = () => {
+            appState.formData.vorname = vornameInput.value.trim();
+            appState.formData.handy = handyInput.value.trim();
+            appState.formData.agb = agbInput.checked;
+            checkNextButtonStatus();
+        };
 
-                form.addEventListener('input', validateForm);
-            };
+            form.addEventListener('input', validateForm);
+        };
 
             const checkNextButtonStatus = () => {
-                let enabled = false;
-                if (currentStep === 2 || currentStep === 3) {
-                    enabled = true;
-                } else if (currentStep === 4) {
-                    enabled = appState.selections['step-4'].length === 3;
-                } else if (currentStep === 5) {
-                    const { vorname, handy, agb } = appState.formData;
-                    enabled = vorname !== '' && handy !== '' && agb;
-                }
-                nextBtn.disabled = !enabled;
-            };
+            let enabled = false;
+            if (currentStep === 2) {
+            enabled = appState.selections['step-2'].index !== null;
+        } else if (currentStep === 3) {
+            enabled = appState.selections['step-3'].index !== null;
+        } else if (currentStep === 4) {
+            enabled = appState.selections['step-4'].length === 3;
+        } else if (currentStep === 5) {
+            const { vorname, handy, agb } = appState.formData;
+            enabled = vorname !== '' && handy !== '' && agb;
+        }
+            nextBtn.disabled = !enabled;
+        };
+
+            // URL-Generierung hinzufügen
+            const generateProphezeiungURL = () => {
+            const baseURL = 'https://api.wahrsager.agenturhaus.ch/wp-json/wahrsager/v1/gettext';
+            const params = new URLSearchParams();
+
+            // Vorname aus dem Formular
+            const firstname = appState.formData.vorname;
+            if (firstname) {
+            params.append('firstname', firstname);
+        }
+
+            // Die 3 Passions aus Step 4
+            const passions = appState.selections['step-4'];
+            if (passions.length >= 1) params.append('passion1', passions[0]);
+            if (passions.length >= 2) params.append('passion2', passions[1]);
+            if (passions.length >= 3) params.append('passion3', passions[2]);
+
+            // WahrsagerId aus Data-Attribut
+            const wahrsagerId = appState.selections['step-2']?.wahrsagerId || '27';
+            params.append('wahrsagerId', wahrsagerId);
+
+            // Telefonnummer ohne +
+            let tel = appState.formData.handy;
+            if (tel && tel.startsWith('+')) {
+            tel = tel.substring(1);
+        }
+            if (tel) {
+            params.append('tel', tel);
+        }
+
+            // Level aus Data-Attribut
+            const level = appState.selections['step-3']?.level || '1';
+            params.append('level', level);
+
+            const finalURL = `${baseURL}?${params.toString()}`;
+            console.log('Generierte Prophezeiung URL:', finalURL);
+            console.log('Finale Auswahl:', appState);
+
+            return finalURL;
+        };
+
+            // Form-Handler hinzufügen
+            const handleFormSubmission = () => {
+            appState.formData.vorname = document.getElementById('vorname').value;
+            appState.formData.handy = document.getElementById('handy').value;
+            appState.formData.agb = document.getElementById('agb').checked;
+
+            generateProphezeiungURL();
+
+            showStep(6);
+        };
 
             const setupVideoRotation = () => {
-                const container = document.getElementById('start-video-container');
-                if(!container) return;
+            const container = document.getElementById('start-video-container');
+            if(!container) return;
 
-                const videos = container.querySelectorAll('.start-video');
-                if(videos.length === 0) return;
+            const videos = container.querySelectorAll('.start-video');
+            if(videos.length === 0) return;
 
-                let currentVideoIndex = 0;
-                videos[0].classList.add('is-active');
+            let currentVideoIndex = 0;
+            videos[0].classList.add('is-active');
 
-                setInterval(() => {
-                    videos[currentVideoIndex].classList.remove('is-active');
-                    currentVideoIndex = (currentVideoIndex + 1) % videos.length;
-                    videos[currentVideoIndex].classList.add('is-active');
-                }, 5000);
-            };
+            setInterval(() => {
+            videos[currentVideoIndex].classList.remove('is-active');
+            currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+            videos[currentVideoIndex].classList.add('is-active');
+        }, 5000);
+        };
 
             const showStep = (stepNumber) => {
-                currentStep = stepNumber;
-                screens.forEach(s => s.classList.remove('active'));
-                const activeScreen = document.getElementById(`step-${stepNumber}`);
-                if (activeScreen) activeScreen.classList.add('active');
+            currentStep = stepNumber;
+            screens.forEach(s => s.classList.remove('active'));
+            const activeScreen = document.getElementById(`step-${stepNumber}`);
+            if (activeScreen) activeScreen.classList.add('active');
 
-                step1Decorations.style.display = (stepNumber === 1) ? 'block' : 'none';
-                startBtn.style.display = (stepNumber === 1) ? 'block' : 'none';
-                stepNav.style.display = (stepNumber > 1 && stepNumber < 6) ? 'flex' : 'none';
-                neustartBtn.style.display = (stepNumber === 6) ? 'block' : 'none';
+            step1Decorations.style.display = (stepNumber === 1) ? 'block' : 'none';
+            startBtn.style.display = (stepNumber === 1) ? 'block' : 'none';
+            stepNav.style.display = (stepNumber > 1 && stepNumber < 6) ? 'flex' : 'none';
+            neustartBtn.style.display = (stepNumber === 6) ? 'block' : 'none';
 
-                nextBtn.textContent = (stepNumber === 5) ? 'Absenden' : 'Weiter';
-                
-                checkNextButtonStatus();
+            nextBtn.textContent = (stepNumber === 5) ? 'Absenden' : 'Weiter';
 
-                if (stepNumber === 2) setTimeout(() => setupCarousel('step-2'), 50);
-                if (stepNumber === 3) setTimeout(() => setupCarousel('step-3'), 50);
-                if (stepNumber === 4) setupTopicSelector();
-                if (stepNumber === 5) setupForm();
-            };
-            
+            checkNextButtonStatus();
+
+            if (stepNumber === 2) setTimeout(() => setupCarousel('step-2'), 50);
+            if (stepNumber === 3) setTimeout(() => setupCarousel('step-3'), 50);
+            if (stepNumber === 4) setupTopicSelector();
+            if (stepNumber === 5) setupForm();
+        };
+
             const resetApp = () => {
-                 appState.selections = { 'step-2': null, 'step-3': null, 'step-4': [] };
-                 appState.formData = { vorname: '', handy: '', agb: false };
-                 document.getElementById('contact-form').reset();
-                 showStep(1);
-            };
+            appState.selections = {
+            'step-2': { index: null, wahrsagerId: null },
+            'step-3': { index: null, level: null },
+            'step-4': []
+        };
+            appState.formData = { vorname: '', handy: '', agb: false };
+            document.getElementById('contact-form').reset();
+            showStep(1);
+        };
 
             // Theme switcher logic
             themeToggle.addEventListener('change', () => {
-                 const isWood = themeToggle.checked;
-                 document.body.classList.toggle('theme-wood', isWood);
-                 document.body.classList.toggle('theme-blue', !isWood);
-            });
+            const isWood = themeToggle.checked;
+            document.body.classList.toggle('theme-wood', isWood);
+            document.body.classList.toggle('theme-blue', !isWood);
+        });
 
             startBtn.addEventListener('click', () => showStep(2));
-            nextBtn.addEventListener('click', () => { if (currentStep < totalSteps) showStep(currentStep + 1); });
+
+            // ANGEPASSTER Next Button Event Listener
+            nextBtn.addEventListener('click', () => {
+            // Spezielle Behandlung für Step 5 (Formular)
+            if (currentStep === 5) {
+            // Formular validieren
+            const vorname = document.getElementById('vorname').value.trim();
+            const handy = document.getElementById('handy').value.trim();
+            const agb = document.getElementById('agb').checked;
+
+            if (!vorname || !handy || !agb) {
+            alert('Bitte fülle alle Felder aus und akzeptiere die AGBs.');
+            return;
+        }
+
+            // Formulardaten speichern und URL generieren
+            handleFormSubmission();
+            return;
+        }
+
+            // Normale Navigation für alle anderen Steps
+            if (currentStep < totalSteps) {
+            showStep(currentStep + 1);
+        }
+        });
+
             backBtn.addEventListener('click', () => { if (currentStep > 1) showStep(currentStep - 1); });
             neustartBtn.addEventListener('click', resetApp);
-            
+
             showStep(1);
             setupParticleEffect();
             setupVideoRotation();
