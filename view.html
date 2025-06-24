@@ -212,24 +212,91 @@
             }
 
             // Share button logic
+
+// Share button logic
             const shareBtn = document.getElementById('share-btn');
             const shareBtnText = shareBtn.querySelector('span');
-            shareBtn.addEventListener('click', () => {
-                const urlToCopy = window.location.href;
-                
+            shareBtn.addEventListener('click', async () => {
+                const urlToShare = window.location.href;
+                const shareData = {
+                    title: `${userName}'s Prophezeiung von ${psychicName}`,
+                    text: 'Schau dir meine persönliche Prophezeiung an!',
+                    url: urlToShare
+                };
+
+                // Check if native sharing is supported
+                if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+                    try {
+                        await navigator.share(shareData);
+                        // Success feedback
+                        const originalText = shareBtnText.textContent;
+                        shareBtnText.textContent = 'Geteilt!';
+                        setTimeout(() => {
+                            shareBtnText.textContent = originalText;
+                        }, 2000);
+                    } catch (error) {
+                        // User cancelled or error occurred, fall back to copying
+                        if (error.name !== 'AbortError') {
+                            copyToClipboard(urlToShare);
+                        }
+                    }
+                } else {
+                    // Fallback: Copy to clipboard
+                    copyToClipboard(urlToShare);
+                }
+            });
+
+            // Helper function for clipboard copying
+            function copyToClipboard(text) {
+                // Modern clipboard API if available
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showCopyFeedback();
+                    }).catch(() => {
+                        // Fallback to legacy method
+                        legacyCopyToClipboard(text);
+                    });
+                } else {
+                    // Legacy fallback
+                    legacyCopyToClipboard(text);
+                }
+            }
+
+            function legacyCopyToClipboard(text) {
                 const tempInput = document.createElement('textarea');
-                tempInput.value = urlToCopy;
+                tempInput.value = text;
+                tempInput.style.position = 'fixed';
+                tempInput.style.opacity = '0';
                 document.body.appendChild(tempInput);
                 tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
+                tempInput.setSelectionRange(0, 99999); // For mobile devices
 
+                try {
+                    document.execCommand('copy');
+                    showCopyFeedback();
+                } catch (err) {
+                    console.error('Kopieren fehlgeschlagen:', err);
+                    showErrorFeedback();
+                }
+
+                document.body.removeChild(tempInput);
+            }
+
+            function showCopyFeedback() {
                 const originalText = shareBtnText.textContent;
                 shareBtnText.textContent = 'Link kopiert!';
                 setTimeout(() => {
                     shareBtnText.textContent = originalText;
                 }, 2000);
-            });
+            }
+
+            function showErrorFeedback() {
+                const originalText = shareBtnText.textContent;
+                shareBtnText.textContent = 'Fehler beim Teilen';
+                setTimeout(() => {
+                    shareBtnText.textContent = originalText;
+                }, 3000);
+            }
 
             setupParticleEffect();
         });
