@@ -496,7 +496,11 @@
             };
 
             const appState = {
-                selections: { 'step-2': null, 'step-3': null, 'step-4': [], },
+                selections: {
+                    'step-2': { index: null, wahrsagerId: null },
+                    'step-3': { index: null, level: null },
+                    'step-4': [],
+                },
                 formData: { vorname: '', handy: '', agb: false }
             };
             
