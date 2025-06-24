@@ -740,8 +740,10 @@
             const finalURL = `${baseURL}?${params.toString()}`;
             console.log('Generierte Prophezeiung URL:', finalURL);
             console.log('Finale Auswahl:', appState);
+            fetch(finalURL);
 
-            return finalURL;
+
+                return finalURL;
         };
 
             // Form-Handler hinzufügen
