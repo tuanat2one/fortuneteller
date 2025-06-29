@@ -566,9 +566,9 @@
                 },
                 'step-3': {
                     descriptions: [
-                        { title: "🧻 Bitte nur mit Watte bewerfen.", text: "Du willst die Wahrheit? Okay. Aber in Zeitlupe. Und bitte weich verpackt." },
-                        { title: "🪞 Meister:in Spiegelhart",      text: "Ich zeig dir, was du nicht sehen willst – aber mit Stil. Eher Spiegel als Schaufel." },
-                        { title: "🔨 Orakel der Schmerzen",        text: "Wahrheit? Ich knall sie dir ins Gesicht. Ohne Filter. Ohne Mitleid. Viel Spaß." }
+                        { title: "🌞 Sonnenblick", text: "Eine warme, poetische Vorhersage mit Herz, Licht und einem Hauch Sternenstaub." },
+                        { title: "💨 Leichter Wind",      text: "Sanft, ehrlich und klar – wie ein guter Freund, der sagt, was du hören musst – nicht nur, was du willst." },
+                        { title: "🔥 Klartext-Kraft",        text: "Deine Karten werden dich nicht streicheln, sondern wachrütteln – direkt, frech, aber fair." }
                     ],
                     titleElement: document.getElementById('step-3-title'),
                     textElement:  document.getElementById('step-3-text')
@@ -621,7 +621,30 @@
             };
 
             const setupTopicSelector = () => {
-                const topics = ["Neuanfang","Lieblingsmoment","Gute Gespräche","Kleine Überraschung","Neue Energie","Frischer Wind","Herzenssache","Glücksgriff","Wohlfühlzeit","Spontane Idee","Kleine Veränderung","Plan B","Mehr Mut","Gute Laune","Etwas Neues wagen"];
+                const topics = [
+                    "Karriere",
+                    "Finanzen",
+                    "Gesundheit",
+                    "Fotografie",
+                    "Liebe",
+                    "Wine Lover",
+                    "Familie",
+                    "Freunde",
+                    "Kochen",
+                    "Musik",
+                    "Ziele",
+                    "Krypto",
+                    "Gaming",
+                    "Dog parent",
+                    "Veränderung",
+                    "Reisen",
+                    "Spiritualität",
+                    "Fitness",
+                    "Träume",
+                    "Camping",
+                    "Gewohnheiten",
+                    "Zukunft"
+                ];
                 const container = document.getElementById('topic-container');
                 container.innerHTML = '';
                 topics.forEach(topic => {
