@@ -427,9 +427,18 @@
              <button id="neustart-btn" class="hidden btn bg-paper-texture px-16 py-4 text-2xl sm:text-3xl">Neustart</button>
         </div>
     </div>
-
+    <script src="/dist/cleave.min.js"></script>
+    <script src="/dist/cleave-phone.ch.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
+
+            // ––– 0) Cleave für CH-Handy
+            const phoneInput = document.getElementById('handy');
+            const cleavePhone = new Cleave(phoneInput, {
+                phone: true,
+                phoneRegionCode: 'CH',
+                delimiter: ' '
+            });
 
             // 1. Partikel-Hintergrund
             const setupParticleEffect = () => {
@@ -672,12 +681,12 @@
             }
 
             const validatePhoneNumber = phone => {
-                const p = phone.replace(/[\s-]/g,'');
-                if (!p.startsWith('+')) return false;
-                if (p.length<10||p.length>15) return false;
-                const num=p.slice(1);
-                if (!/^\d+$/.test(num)) return false;
-                return ['41','49','39','43','33'].some(c=>num.startsWith(c));
+                let raw = phone.replace(/\D/g,'');
+                // +41 / 41 → 0 umwandeln
+                if (raw.startsWith('41') && raw.length === 11) {
+                    raw = '0' + raw.slice(2);
+                }
+                return /^0\d{9}$/.test(raw);
             };
 
             const checkNextButtonStatus = () => {
@@ -699,7 +708,20 @@
                 if (vorname) p.append('firstname',vorname);
                 [...appState.selections['step-4']].forEach((t,i)=>p.append(`passion${i+1}`,t));
                 p.append('wahrsagerId', appState.selections['step-2'].wahrsagerId);
-                p.append('tel', handy.replace(/^\+/,''));
+                let raw = handy.replace(/\D/g, '');   // z.B. "0793513494" oder "41793513494"
+                if (raw.startsWith('0') && raw.length === 10) {
+                    // national → international
+                    raw = '41' + raw.slice(1);
+                } else if (raw.startsWith('0041') && raw.length === 12) {
+                    // "004179..." → "4179..."
+                    raw = raw.slice(2);
+                } else if (raw.startsWith('41') && raw.length === 11) {
+                    // schon gut so
+                } else {
+                    // hier könntest du noch einen Fehler werfen, falls raw nicht passt
+                    console.warn('Ungültiges Telefonformat:', handy);
+                }
+                p.append('tel', raw);
                 p.append('level', appState.selections['step-3'].level);
                 const url = `${base}?${p}`;
                 console.log('Prophezeiung URL:', url);
