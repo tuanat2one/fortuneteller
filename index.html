@@ -409,13 +409,6 @@
                 <form id="contact-form" autocomplete="off">
                     <input type="text" id="vorname" name="vorname" placeholder="Dein Vorname" class="form-input">
                     <input type="tel" id="handy" name="handy" value="+41" placeholder="Handynummer (no spam, versprochen)" class="form-input">
-                    <label class="checkbox-label mt-4">
-                        <input type="checkbox" id="agb" name="agb">
-                        <span class="custom-checkbox">
-                             <svg class="w-4 h-4 text-red-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                        </span>
-                        Ich akzeptiere die AGBs
-                    </label>
                 </form>
             </div>
         </div>
@@ -515,7 +508,7 @@
                     'step-3': { index: null, level: null },
                     'step-4': []
                 },
-                formData: { vorname: '', handy: '', agb: false }
+                formData: { vorname: '', handy: '' }
             };
             let currentStep = 1;
             const totalSteps = 6;
@@ -670,20 +663,17 @@
                 });
             };
 
-            const setupForm = () => {
+            function setupForm() {
                 const form = document.getElementById('contact-form');
                 const vor = document.getElementById('vorname');
                 const tel = document.getElementById('handy');
-                const agb = document.getElementById('agb');
-                [vor,tel,agb].forEach(el=>el.value=appState.formData[el.id]||'');
-                agb.checked = appState.formData.agb;
+                [vor, tel].forEach(el => el.value = appState.formData[el.id] || '');
                 form.addEventListener('input', () => {
                     appState.formData.vorname = vor.value.trim();
-                    appState.formData.handy = tel.value.trim();
-                    appState.formData.agb   = agb.checked;
+                    appState.formData.handy   = tel.value.trim();
                     checkNextButtonStatus();
                 });
-            };
+            }
 
             const validatePhoneNumber = phone => {
                 const p = phone.replace(/[\s-]/g,'');
@@ -700,8 +690,8 @@
                 if (currentStep===3) en = appState.selections['step-3'].index!==null;
                 if (currentStep===4) en = appState.selections['step-4'].length===3;
                 if (currentStep===5) {
-                    const { vorname, handy, agb } = appState.formData;
-                    en = vorname && handy && agb && validatePhoneNumber(handy);
+                    const { vorname, handy } = appState.formData;
+                    en = vorname && handy && validatePhoneNumber(handy);
                 }
                 nextBtn.disabled = !en;
             };
@@ -724,7 +714,6 @@
             const handleFormSubmission = () => {
                 appState.formData.vorname = document.getElementById('vorname').value;
                 appState.formData.handy   = document.getElementById('handy').value;
-                appState.formData.agb     = document.getElementById('agb').checked;
                 generateProphezeiungURL();
                 showStep(6);
             };
@@ -747,7 +736,7 @@
 
             const resetApp = () => {
                 appState.selections = { 'step-2': {index:null}, 'step-3':{index:null}, 'step-4':[] };
-                appState.formData   = { vorname:'', handy:'', agb:false };
+                appState.formData   = { vorname:'', handy:'' };
                 document.getElementById('contact-form').reset();
                 showStep(1);
             };
